@@ -1,0 +1,72 @@
+<section class="hero">
+
+  <div class="content">
+    <h1>
+      Powerful <br />
+      <span>README</span><br />
+      Tool
+    </h1>
+  </div>
+
+  <button class="left-btn">view samples</button>
+  <button class="right-btn">try it for free</button>
+
+</section>
+
+<style>
+.hero {
+  position: relative;
+  height: 90vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: radial-gradient(circle at center, #0f2f2a, #050808);
+  border-radius: 30px;
+  margin: 20px;
+  overflow: hidden;
+}
+
+/* Glow effect */
+.hero::before {
+  content: "";
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  background: #00ffcc;
+  filter: blur(120px);
+  opacity: 0.2;
+}
+
+.content h1 {
+  font-size: 5rem;
+  text-align: center;
+  line-height: 1.1;
+}
+
+.content span {
+  color: #00ffcc;
+}
+
+/* Buttons */
+.left-btn,
+.right-btn {
+  position: absolute;
+  padding: 12px 20px;
+  border-radius: 20px;
+  border: none;
+  color: white;
+  background: rgba(0,255,200,0.1);
+}
+
+.left-btn {
+  left: 40px;
+  top: 50%;
+}
+
+.right-btn {
+  right: 40px;
+  bottom: 40px;
+}
+</style>
