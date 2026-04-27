@@ -2,13 +2,13 @@
   <div class="logo">Gittie</div>
 
   <div class="links">
-    <a href="#">Services</a>
-    <a href="#">Pricing</a>
-    <a href="#">Features</a>
-    <a href="#">About</a>
+    <a href="#">Create</a>
+    <a href="#">Documentation</a>
+    <a href="#">Explore</a>
+    <a href="#">Community</a>
   </div>
 
-  <button class="signup">Sign up</button>
+  <a href="/signup" class="signup-btn">Sign up</a>
 </nav>
 
 <style>
@@ -33,11 +33,20 @@
   text-decoration: none;
 }
 
-.signup {
+.signup-btn {
   background: rgba(255,255,255,0.1);
   border: none;
   padding: 10px 20px;
   border-radius: 20px;
   color: white;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.signup-btn:hover {
+  background: rgba(0,255,204,0.2);
 }
 </style>
