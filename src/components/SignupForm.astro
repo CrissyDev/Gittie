@@ -88,92 +88,116 @@
 </div>
 
 <script>
-const form = document.getElementById('signup-form');
-const submitBtn = document.getElementById('submit-btn');
-const errorMsg = document.getElementById('error-message');
-const successMsg = document.getElementById('success-message');
+const form = document.getElementById('signup-form') as HTMLFormElement | null;
+const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement | null;
+const errorMsg = document.getElementById('error-message') as HTMLDivElement | null;
+const successMsg = document.getElementById('success-message') as HTMLDivElement | null;
 
 // Email signup
-form.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  
-  const fullName = document.getElementById('fullName').value.trim();
-  const email = document.getElementById('email').value.trim();
-  const password = document.getElementById('password').value;
-  const confirmPassword = document.getElementById('confirmPassword').value;
-  const termsAccepted = document.getElementById('terms').checked;
+if (form) {
+  form.addEventListener('submit', async (e: Event) => {
+    e.preventDefault();
+    
+    const fullNameInput = document.getElementById('fullName') as HTMLInputElement | null;
+    const emailInput = document.getElementById('email') as HTMLInputElement | null;
+    const passwordInput = document.getElementById('password') as HTMLInputElement | null;
+    const confirmPasswordInput = document.getElementById('confirmPassword') as HTMLInputElement | null;
+    const termsInput = document.getElementById('terms') as HTMLInputElement | null;
 
-  // Clear messages
-  errorMsg.style.display = 'none';
-  successMsg.style.display = 'none';
-
-  // Validation
-  if (!fullName || !email || !password || !confirmPassword) {
-    showError('Please fill in all fields');
-    return;
-  }
-
-  if (password !== confirmPassword) {
-    showError('Passwords do not match');
-    return;
-  }
-
-  if (password.length < 6) {
-    showError('Password must be at least 6 characters');
-    return;
-  }
-
-  if (!termsAccepted) {
-    showError('Please accept the terms and conditions');
-    return;
-  }
-
-  submitBtn.disabled = true;
-  submitBtn.textContent = 'Creating account...';
-
-  try {
-    const response = await fetch('/api/auth/signup', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        fullName,
-        email,
-        password,
-      }),
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      showError(data.error || 'Sign up failed');
+    if (!fullNameInput || !emailInput || !passwordInput || !confirmPasswordInput || !termsInput) {
+      showError('Form elements not found');
       return;
     }
 
-    showSuccess('Account created successfully! Redirecting...');
-    setTimeout(() => {
-      window.location.href = '/';
-    }, 2000);
-  } catch (error) {
-    showError('An error occurred. Please try again.');
-    console.error('Sign up error:', error);
-  } finally {
-    submitBtn.disabled = false;
-    submitBtn.textContent = 'Create Account';
-  }
-});
+    const fullName = fullNameInput.value.trim();
+    const email = emailInput.value.trim();
+    const password = passwordInput.value;
+    const confirmPassword = confirmPasswordInput.value;
+    const termsAccepted = termsInput.checked;
+
+    // Clear messages
+    if (errorMsg) errorMsg.style.display = 'none';
+    if (successMsg) successMsg.style.display = 'none';
+
+    // Validation
+    if (!fullName || !email || !password || !confirmPassword) {
+      showError('Please fill in all fields');
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      showError('Passwords do not match');
+      return;
+    }
+
+    if (password.length < 6) {
+      showError('Password must be at least 6 characters');
+      return;
+    }
+
+    if (!termsAccepted) {
+      showError('Please accept the terms and conditions');
+      return;
+    }
+
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Creating account...';
+    }
+
+    try {
+      const response = await fetch('/api/auth/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          fullName,
+          email,
+          password,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        showError(data.error || 'Sign up failed');
+        return;
+      }
+
+      showSuccess('Account created successfully! Redirecting...');
+      setTimeout(() => {
+        window.location.href = '/';
+      }, 2000);
+    } catch (error) {
+      showError('An error occurred. Please try again.');
+      console.error('Sign up error:', error);
+    } finally {
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Create Account';
+      }
+    }
+  });
+}
 
 // OAuth buttons
-document.getElementById('github-btn').addEventListener('click', async () => {
-  await handleOAuth('github');
-});
+const githubBtn = document.getElementById('github-btn') as HTMLButtonElement | null;
+const googleBtn = document.getElementById('google-btn') as HTMLButtonElement | null;
 
-document.getElementById('google-btn').addEventListener('click', async () => {
-  await handleOAuth('google');
-});
+if (githubBtn) {
+  githubBtn.addEventListener('click', async () => {
+    await handleOAuth('github');
+  });
+}
 
-async function handleOAuth(provider) {
+if (googleBtn) {
+  googleBtn.addEventListener('click', async () => {
+    await handleOAuth('google');
+  });
+}
+
+async function handleOAuth(provider: string) {
   try {
     const response = await fetch('/api/auth/oauth', {
       method: 'POST',
@@ -199,16 +223,24 @@ async function handleOAuth(provider) {
   }
 }
 
-function showError(message) {
-  errorMsg.textContent = message;
-  errorMsg.style.display = 'block';
-  successMsg.style.display = 'none';
+function showError(message: string) {
+  if (errorMsg) {
+    errorMsg.textContent = message;
+    errorMsg.style.display = 'block';
+  }
+  if (successMsg) {
+    successMsg.style.display = 'none';
+  }
 }
 
-function showSuccess(message) {
-  successMsg.textContent = message;
-  successMsg.style.display = 'block';
-  errorMsg.style.display = 'none';
+function showSuccess(message: string) {
+  if (successMsg) {
+    successMsg.textContent = message;
+    successMsg.style.display = 'block';
+  }
+  if (errorMsg) {
+    errorMsg.style.display = 'none';
+  }
 }
 </script>
 
